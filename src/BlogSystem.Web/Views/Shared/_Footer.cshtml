@@ -1,0 +1,22 @@
+﻿<footer role="contentinfo" class="container-fluid">
+    <a href="@ViewData["Facebook_Profile"]" rel="me" class="facebook">
+        <strong>Facebook</strong>
+    </a>
+    <a href="@ViewData["Twitter_Profile"]" rel="me" class="twitter">
+        <strong>Twitter</strong>
+    </a>
+    <a href="@ViewData["GitHub_Profile"]" rel="me" class="github">
+        <strong>GitHub</strong>
+    </a>
+    <a href="@ViewData["YouTube_Profile"]" rel="me" class="youtube">
+        <strong>YouTube</strong>
+    </a>
+    <a href="@ViewData["Instagram_Profile"]" rel="me" class="instagram">
+        <strong>Instagram</strong>
+    </a>
+
+    <p class="copyright">
+        @DateTime.Now.Year
+        <strong>@ViewData["Blog_Author"]</strong>.
+    </p>
+</footer>

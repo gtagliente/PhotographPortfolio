@@ -1,0 +1,42 @@
+﻿@model IEnumerable<BlogSystem.Data.Models.Setting>
+
+@{
+    ViewBag.Title = "All Settings";
+}
+
+<h2>@ViewBag.Title</h2>
+<hr />
+
+<table class="table table-inverse">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Key)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Value)
+            </th>
+            <td>Update</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var setting in Model)
+        {
+            <tr>
+                <td>@setting.Key.Replace('_', ' ')</td>
+                <td>
+                    @if(setting.Value.Length > 50)
+                    {
+                        @setting.Value.Substring(0, 50)
+                    }
+                    else {
+                        @setting.Value
+                    }
+                </td>
+                <td>
+                    @Html.ActionLink("Update", "Update", new { id = setting.Key, area = "Administration" }, new { @class="btn btn-info "})
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

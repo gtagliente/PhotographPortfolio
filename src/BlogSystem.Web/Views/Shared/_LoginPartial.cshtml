@@ -1,0 +1,36 @@
+﻿@using BlogSystem.Common
+
+<ul class="navbar-nav navbar-right">
+    @if (Request.IsAuthenticated)
+    {
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="user" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Hello @User.Identity.Name
+            </a>
+            <div class="dropdown-menu" aria-labelledby="user">
+                @if (User.IsInRole(GlobalConstants.AdministratorRoleName))
+                {
+                    @Html.ActionLink("Administration", "Index", "Home", new { area = "Administration" }, new { @class = "dropdown-item" })
+                }
+
+                @Html.ActionLink("Manage", "Index", "Manage", new { area = string.Empty }, new { @class = "dropdown-item", title = "Manage" })
+
+                @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <a href="javascript:document.getElementById('logoutForm').submit()" class="dropdown-item">Log off</a>
+                }
+            </div>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item">
+            @Html.ActionLink("Register", "Register", "Account", new { area = string.Empty }, new { @class = "btn btn-outline-success my-2 my-sm-0", id = "registerLink" })
+        </li>
+        <li class="nav-item">
+            @Html.ActionLink("Log in", "Login", "Account", new { area = string.Empty }, new { @class = "btn btn-outline-success my-2 my-sm-0", id = "loginLink" })
+        </li>
+    }
+</ul>

@@ -1,0 +1,51 @@
+﻿@*<header role="banner">
+    <hgroup>
+        <h1>@ViewData["Blog_Title"]</h1>
+        <h2>@ViewData["Blog_Description"]</h2>
+    </hgroup>
+</header>
+
+<nav class="navbar navbar-toggleable-md navbar-inverse" role="navigation">
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <a href="/" title="@ViewData["Blog_Title"]" class="navbar-brand">
+        <img src="@ViewData["Blog_Logo"]" alt="Blog logo" width="50" height="35" />
+        <span class="sr-only">@ViewData["Blog_Title"]</span>
+    </a>
+
+    <div class="collapse navbar-collapse" id="navbar">
+        @{ Html.RenderAction("Menu", "Blog"); }
+        @Html.Partial("_LoginPartial")
+    </div>
+</nav>*@
+
+
+
+<header>
+	<div class="pp-header">
+		<nav class="navbar navbar-expand-lg navbar-light">
+			<div class="container">
+				<a href="index.html"><img src="images/favicon.png" alt="Logo"></a><a class="navbar-brand" href="index.html">Photo Perfect</a>
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+				<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+					<ul class="navbar-nav ml-auto">
+						<li class="nav-item active">
+							<a class="nav-link" href="index.html">Home</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="about.html">About</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="blog.html">Blog</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="contact.html">Contact</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</div>
+</header>

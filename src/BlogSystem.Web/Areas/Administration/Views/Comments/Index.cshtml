@@ -1,0 +1,61 @@
+﻿@model BlogSystem.Web.Areas.Administration.ViewModels.Comments.IndexCommentsPageViewModel
+
+@{
+    ViewBag.Title = "All Comments";
+}
+
+<h2>@ViewBag.Title</h2>
+<hr />
+
+@if (Model.Comments.Any())
+{
+    <table class="table table-inverse">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Post</th>
+                <th>Author</th>
+                <th>Created On</th>
+                <th>Modified On</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var comment in Model.Comments)
+            {
+                <tr>
+                    <td>@comment.Id</td>
+                    <td>
+                        @Html.RouteLink(comment.Post, "Posts", new { Area = string.Empty, Id = comment.PostId, Title = comment.PostUrl })
+                    </td>
+                    <td>@comment.Author</td>
+                    <td>
+                        @Html.DisplayFor(m => comment.CreatedOn)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(m => comment.ModifiedOn)
+                    </td>
+                    <td>
+                        <div class="btn-group">
+                            <a href="@Url.Action("Edit", "Comments", new {area = "Administration", id = comment.Id})" class="btn btn-warning">
+                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                Edit
+                            </a>
+                            <a href="@Url.Action("Delete", "Comments", new {area = "Administration", id = comment.Id})" class="btn btn-danger">
+                                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                Delete
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h2>No comments available.</h2>
+}
+
+@Html.Partial("_Pagination")

@@ -1,0 +1,9 @@
+
+ IList<Google.Apis.Drive.v3.Data.File> driveFiles = listRequest.Execute()
+Line 67:                 .Files;
+Line 68:             Console.WriteLine("Files:");
+
+ Error:"invalid_grant", Description:"Token has been expired or revoked.", Uri:"" 
+
+
+Da Controllare autenticazione

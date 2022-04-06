@@ -1,0 +1,28 @@
+﻿@model IEnumerable<BlogSystem.Web.ViewModels.Comments.CommentViewModel>
+
+@if (Model.Any())
+{
+    <section class="comments">
+        <h4>Comments</h4>
+
+        @foreach (var comment in Model)
+        {
+            <div class="comment">
+                <header class="c-header">
+                    <time datetime="@comment" class="c-date">@Html.DisplayFor(model => comment.CreatedOn)</time>
+                    <strong class="c-author">@comment.Author</strong>
+                </header>
+
+                <div class="c-body">
+                    @Html.Raw(comment.Content)
+                </div>
+            </div>
+        }
+    </section>
+}
+else
+{
+    <section class="comments">
+        <h4>Sorry, nothing here...</h4>
+    </section>
+}

@@ -1,0 +1,282 @@
+﻿@*@model  BlogSystem.Web.ViewModels.Pic.PicPostModel*@
+
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+	<meta name="robots" content="index, follow">
+	<meta name="revisit-after" content="1 days">
+
+	<meta name="author" content="@ViewData["Blog_Author"]">
+	<meta name="keywords" content="@ViewData["Blog_Keywords"]">
+	<meta name="description" content="@ViewData["Blog_Title"] - @ViewData["Blog_Description"]">
+
+	<title>@ViewBag.Title - @ViewData["Blog_Title"]</title>
+
+	<link href="https://fonts.googleapis.com/css?family=Lemonada" rel="stylesheet">
+
+	@Styles.Render("~/Content/bootstrap")
+	@Styles.Render("~/Content/dropzone")
+	@*@Styles.Render("~/Content/tether")*@
+	@Styles.Render("~/Content/fonts")
+	@Styles.Render("~/Content/main")
+
+
+	<link href="~/Content/prism/prism.css" rel="stylesheet" />
+
+	<style>
+		.dropzone {
+			min-height: 50px !important;
+		}
+
+		.dropzone {
+			text-align: center;
+			padding: 20px;
+			border: 3px dashed #eeeeee;
+			background-color: #fafafa;
+			color: #bdbdbd;
+			margin-bottom: 20px;
+		}
+	</style>
+
+</head>
+<body id="top">
+	<div class="page">
+		@Html.Partial("_Header")
+
+		<main class="container-fluid" role="main">
+			<div class="row">
+				@*<div class="col-lg-4 col-md-4 col-sm-12">
+						@{ Html.RenderAction("Sidebar", "Blog"); }
+					</div>*@
+				<div class="col-lg-8 col-md-8 col-sm-12" id="contentdiv">
+					@RenderBody()
+				</div>
+				<div class="col-lg-3 col-md-3 col-sm-12">
+					<fieldset class="border p-2 imgform">
+						<div class="loader"></div>
+
+						<legend class="w-auto">Add Image</legend>
+
+						@*<form action="/FileUpload/UploadFiles" class="dropzone" id="my-awesome-dropzone" onSubmit="window.location.reload()"></form>*@
+						@*@using (Html.BeginForm("/UploadFiles", "Home", FormMethod.Post, new { @name = "myDropzone", id = "myDropzone", @enctype = "multipart/form-data"}))*@
+						@using (Html.BeginForm("/UploadFiles", "Home", FormMethod.Post, new { @name = "myDropzone", id = "myDropzone", @enctype = "multipart/form-data" }))
+						{
+							<br />
+							<input class="form-control" type="text" name="Name" id="Name" placeholder="Name" readonly>
+							<br />
+							@*<input class="form-control" type="text" name="Category" id="Category" placeholder="Category">*@
+
+							<select class="selectpicker" id="Category" data-live-search="true">
+							</select>
+							<br />
+							<br />
+
+							<div>
+								<div id="previews" class="dz-default dz-message box__input dropzone" disabled>
+									<div style="text-align:center">
+										<i class="fa fa-cloud-upload" style="font-size:23px;position:relative;top:4px;"></i>
+										<span style="margin-left:20px">Drop files  to attach or browse</span>
+									</div>
+								</div>
+								<div id="previewFiles"></div>
+							</div>
+							<br />
+							<div>
+								<input type="submit" id="Submit" name="Submit" class="btn btn-success m-t-5" value="Submit">
+							</div>
+						}
+				</div>
+				</fieldset>
+			</div>
+
+
+
+		</main>
+
+		@*@Html.Partial("_Footer")*@
+
+		@Scripts.Render("~/bundles/jquery")
+		@*@Scripts.Render("~/bundles/tether")*@
+		@Scripts.Render("~/bundles/bootstrap")
+		@Scripts.Render("~/bundles/main")
+		@Scripts.Render("~/bundles/dropzone")
+
+		<script src="~/Content/prism/prism.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.js"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.17/css/bootstrap-select.min.css" />
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.17/js/bootstrap-select.min.js"></script>
+
+
+		@*@section scripts{*@
+
+		<script>
+		var customDropzone;
+
+			$(document).ready(function () {
+			enableForm(false);
+			$('#Name').val('');
+			getTags();
+			Dropzone.autoDiscover = false;
+				$('#myDropzone').dropzone({
+					//parameter name value
+					paramName: "files",
+					//clickable div id
+					clickable: '#previews',
+					//preview files container Id
+					previewsContainer: "#previewFiles",
+					autoProcessQueue: false,
+					uploadMultiple: false,
+					//parallelUploads: 100,
+					maxFiles: 100,
+					//  url:"/", // url here to save file
+					maxFilesize: 100,//max file size in MB,
+					addRemoveLinks: true,
+					dictResponseError: 'Server not Configured',
+					acceptedFiles: ".png,.jpg,.gif,.bmp,.jpeg,.pdf",// use this to restrict file type
+					init: function () {
+						customDropzone = this;
+						var self = this;
+						// config
+						self.options.addRemoveLinks = true;
+						self.options.dictRemoveFile = "Delete";
+						//New file added
+						self.on("addedfile", function (file) {
+							console.log('new file added ', file);
+							$('.dz-success-mark').hide();
+							$('.dz-error-mark').hide();
+						});
+						// Send file starts
+						self.on("sending", function (file) {
+							console.log('upload started', file);
+							$('.meter').show();
+						});
+
+						// File upload Progress
+						self.on("totaluploadprogress", function (progress) {
+							console.log("progress ", progress);
+							$('.roller').width(progress + '%');
+						});
+
+						self.on("queuecomplete", function (progress) {
+							$('.meter').delay(999).slideUp(999);
+						});
+
+						// On removing file
+						self.on("removedfile", function (file) {
+							console.log(file);
+						});
+
+						self.on("successmultiple", function (files, response) {
+							// Gets triggered when the files have successfully been sent.
+							// Redirect user or notify of success.
+
+						});
+					}
+				});
+				$('#myDropzone').submit(function () {
+					enableForm(false);
+					$('.loader').show();
+				var datiform = new FormData();
+				datiform.append('Name', $('#Name').val());
+				datiform.append('Category', $('#Category').val());
+				var x = 0;
+				for (var x = 0; x < customDropzone.files.length; x++) {
+					datiform.append('files', customDropzone.files[x]);
+				}
+            $.ajax({
+                url: '@Url.Action("UploadFiles", "Home")',
+                type: "POST",
+				//dataType: 'JSON',
+				//mimeType: "multipart/form-data",
+				dataType: false,
+				mimeType: false,
+				contentType: false,
+				cache: false,
+				processData: false,
+				data: datiform,
+				success: function (result) {
+					alert("success ");
+					$('.loader').hide();
+					//$('#contentdiv').html(result);
+					location.reload();
+                },
+                error: function (result) {
+                    alert("Failed");
+                }
+            });
+          return false;
+        });
+
+
+
+
+		})
+
+
+		function getTags() {
+			$.ajax({
+               url: '@Url.Action("GetTags", "Home")',
+               type: "POST",
+			//dataType: 'JSON',
+			//mimeType: "multipart/form-data",
+			dataType: false,
+			mimeType: false,
+			contentType: false,
+			cache: false,
+			processData: false,
+			success: function (result) {
+				console.log(result);
+				for (key in result) {
+					if (typeof (result[key] == 'string')) {
+						$('#Category').append('<option>' + result[key] + '</option>');
+					}
+				}
+				//$('#Name').attr('readonly', false);
+				//console.log("abilito button");
+				//$('#Category').prop('disabled', false);
+				//console.log("abilitato button");
+				//$('#Submit').prop('disabled', false);
+				////$('#Category').selectpicker();
+				//$('#Category').selectpicker('refresh');
+				//$('#Category').selectpicker('render');
+
+				enableForm(true);
+				$('.loader').hide();
+				
+				
+               },
+               error: function (result) {
+                   alert("Failed");
+               }
+           });
+			}
+
+			function enableForm(enableFlag) {
+				if (enableFlag == false) {
+					$('#Category').prop('disabled', true);
+					$('#Category').selectpicker('refresh');
+					$('#Submit').prop('disabled', true);
+					$('#Name').prop('readonly', true);
+				}
+				else {
+					$('#Category').prop('disabled', false);
+					$('#Category').selectpicker('refresh');
+					$('#Submit').prop('disabled', false);
+					$('#Name').prop('readonly', false);
+				}
+			}
+
+		</script>
+		@* } *@
+		@RenderSection("scripts", false)
+
+	</div>
+	<script language="javascript" type="text/javascript">
+
+	</script>
+</body>
+</html>

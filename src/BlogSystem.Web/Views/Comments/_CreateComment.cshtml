@@ -1,0 +1,36 @@
+﻿@model BlogSystem.Web.ViewModels.Comments.CommentViewModel
+
+<h5>Leave a Comment</h5>
+
+@if (User.Identity.IsAuthenticated)
+{
+    using (Ajax.BeginForm("Create", "Comments",
+        new { id = this.ViewData["id"] },
+        new AjaxOptions
+        {
+            HttpMethod = "Post",
+            InsertionMode = InsertionMode.Replace,
+            UpdateTargetId = "comments",
+            OnFailure = "BlogSystem.onCreateCommentFailure",
+            OnSuccess = "BlogSystem.onAddCommentSuccess"
+        }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
+
+        <div class="form-group">
+            @Html.EditorFor(m => m.Content, new { htmlAttributes = new { @class = "form-control " } })
+            @Html.ValidationMessageFor(m => m.Content, string.Empty, new { @class = "text-danger" })
+        </div>
+
+        <button type="submit" class="btn btn-lg btn-success">Add Comment</button>
+    }
+}
+else
+{
+    <p>Only registered users can comment.</p>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

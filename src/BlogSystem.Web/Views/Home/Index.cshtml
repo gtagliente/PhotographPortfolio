@@ -1,0 +1,266 @@
+﻿@model BlogSystem.Web.ViewModels.Home.IndexPageViewModel
+
+@{
+	ViewBag.Title = "Home";
+}
+
+@*@if (Model.Posts.Any())
+	{
+		foreach (var post in Model.Posts)
+		{
+			<article class="entry">
+				<header class="e-header">
+					<h2 class="e-title">
+						@Html.RouteLink(post.Title, "Posts", new { slug = post.Slug, id = post.Id })
+					</h2>
+
+					<time datetime="@post.CreatedOn" class="e-date">@Html.Timeago(post.CreatedOn)</time>
+
+					<strong class="e-author">@post.Author</strong>
+				</header>
+
+				<div class="e-content">
+					@Html.Truncate(post.Content)
+				</div>
+			</article>
+		}
+	}
+	else
+	{
+		<article class="entry center">
+			<h2>Error</h2>
+			<h3>Sorry, nothing here...</h3>
+		</article>
+	}*@
+<style>
+	/*.pp-gallery figure.pp-effect figcaption {
+		border: 1px solid red;
+	}*/
+
+	.pp-gallery div.card a.selected {
+		border: 1px solid blue;
+		opacity: 0.2;
+	}
+</style>
+
+<div class="page-content">
+	<div class="container">
+		<div class="container pp-section">
+			<div class="row">
+				<div class="col-md-9 col-sm-12 px-0">
+					<h1 class="h3"> We are Photo Perfect, A Digital Photography Studio.</h1>
+				</div>
+			</div>
+		</div>
+		<div class="container px-0 py-4">
+			<div class="pp-category-filter">
+				<div class="row">
+					<div class="col-sm-12">
+						@*<a class="btn btn-primary pp-filter-button" href="#" data-filter="all">All</a>
+							<a class="btn btn-outline-primary pp-filter-button" href="#" data-filter="people">People</a>
+							<a class="btn btn-outline-primary pp-filter-button" href="#" data-filter="nature">Nature</a>
+							<a class="btn btn-outline-primary pp-filter-button" href="#" data-filter="computer">Computer</a>
+							<a class="btn btn-outline-primary pp-filter-button" href="#" data-filter="food">Food</a>*@
+
+						@if (Model.Tags.Any())
+						{
+							foreach (var tag in Model.Tags)
+							{
+								<a class="btn btn-primary pp-filter-button" href="#" data-filter="@tag.Value">@tag.Value</a>
+							}
+						}
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="container px-0">
+			<div class="pp-gallery">
+				<div class="card-columns">
+					<!--<div class="card" data-groups="[&quot;nature&quot;]">
+						<a href="image-detail.html">
+							<figure class="pp-effect">
+								<img class="img-fluid" src="images/10-people.jpg" alt="Nature" />
+								<figcaption>
+									<div class="h4">Forest</div>
+									<p>Nature</p>
+								</figcaption>
+							</figure>
+						</a>
+					</div>-->
+					@if (Model.Pics.Any())
+					{
+						foreach (var pic in Model.Pics)
+						{
+
+							<div class="card" data-groups="[&quot;@pic.Category&quot;]">
+								@*<a href="#" data-toggle="modal" data-target="#exampleModal">*@
+								<a href="#" onclick="swipe($(this))" id="@pic.Id">
+
+									<figure class="pp-effect">
+										<img class="img-fluid" src="@pic.SrcBase64" alt="Nature" />
+										<figcaption>
+											<div class="h4">@pic.Name</div>
+											<p>@pic.Category</p>
+										</figcaption>
+									</figure>
+								</a>
+							</div>
+
+
+						}
+
+					}
+				</div>
+			</div>
+		</div>
+
+		<div class="pp-section"></div>
+	</div>
+</div>
+@*<img src="\images\5-nature.jpg" class="d-block w-100" alt="...">*@
+<button type="button" class="btn btn-primary" id="SubmitOrder">
+	OK
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" style="width:85%;height:100%;max-width:100%;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div id="carouselExampleFade" class="carousel" data-interval="false">
+					<div class="carousel-inner" style="background-color:black;">
+						@{
+							for (int i = 0; i < Model.Pics.Count(); i++)
+							{
+								<div class="carousel-item @(i == 0 ? "active" : "") " style="width:100%;height:550px;" id="modal_@Model.Pics.ElementAt(i).Id">
+									<div style="width:80%;height:100%;display:block;float:left;margin:0;padding:0;border:1px solid red;">
+										<img src="@Model.Pics.ElementAt(i).SrcBase64" alt="..." style="max-width:80%;max-height:100%;display:block;float:left;">
+									</div>
+									<div style="background-color:white;width:20%;height:100%;display:block;float:left;margin:0;padding:0;border:1px solid  yellow;">
+										<h1>Titolo</h1>
+										<p>Descrizione: @Model.Pics.ElementAt(i).Id</p>
+									</div>
+								</div>
+
+							}
+						}
+					</div>
+					<a class="carousel-control-prev" href="#carouselExampleFade" role="button" data-slide="prev">
+						<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+						<span class="sr-only">Previous</span>
+					</a>
+					<a class="carousel-control-next" href="#carouselExampleFade" role="button" data-slide="next">
+						<span class="carousel-control-next-icon" aria-hidden="true"></span>
+						<span class="sr-only">Next</span>
+					</a>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary">Save changes</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+@Scripts.Render("~/bundles/jquery")
+@*@Scripts.Render("~/bundles/tether")*@
+@Scripts.Render("~/bundles/bootstrap")
+@Scripts.Render("~/bundles/main")
+@Scripts.Render("~/bundles/dropzone")
+
+<script>
+	var previous=null;
+	function openModal(elem) {
+		var idElem = elem.attributes['id'].value;
+		console.log('ID Elemento: ' + idElem);
+		$('.carousel-item').removeClass("active");
+		$('.carousel-item#modal_' + idElem).addClass("active");
+		$('#exampleModal').modal('show');
+	}
+
+	function swipe(elem) {
+		console.log(elem);
+		//elem.css({ "border": "1px solid blue", "opacity": "0.2"});
+		$(elem).addClass("selected");
+
+		//elem1 = $('div.card')[0];
+		//elem2 = $('div.card')[1];
+		//tmp = elem1;
+		//elem1 = elem2;
+		//elem2 = tmp;
+		//$('div.card #29777678').parent('div.card')
+		var elem1 = $(elem).parent('div.card');
+		if (previous != null) {
+			$($(elem1).find('a')).removeClass("selected");
+			$($(previous).find('a')).removeClass("selected");
+			swapWith(elem1, previous);
+			previous = null;
+		}
+		else previous = elem1;
+		//var elem2 = $('div.card')[0];
+	}
+
+	  function swapWith (from,to) {
+		//return this.each(function () {
+			var copy_to = $(to).clone(true);
+			var copy_from = $(from).clone(true);
+			$(to).replaceWith(copy_from);
+			$(from).replaceWith(copy_to);
+		//});
+	};
+
+
+	$(document).ready(function () {
+		debugger;
+
+		$('#SubmitOrder').click(function () {
+			debugger;
+
+			var datiform = new FormData();
+			var jsList = $('.pp-gallery div.card-columns div.card');
+			var dotnetList = new Array();
+			for (var i = 0; i < jsList.length; i++){
+				var obj = new Object();
+				obj.Id = $($(jsList[i]).find('a')).attr('id');
+				obj.Ordinal = i + 1;
+				dotnetList.push(obj);
+				datiform.append('[' + i + '].Id', obj.Id);
+				datiform.append('[' + i + '].Ordinal', obj.Ordinal);
+			}
+			
+			$.ajax({
+				url: '@Url.Action("UploadOrdinals", "Home")',
+				type: "POST",
+				//dataType: 'JSON',
+				//mimeType: "multipart/form-data",
+				//contentType: "application/json",
+				//data: JSON.stringify({ dotnetList: dotnetList }),
+				dataType: false,
+				mimeType: false,
+				contentType: false,
+				cache: false,
+				processData: false,
+				data: datiform,
+				success: function (result) {
+					debugger;
+					alert("success ");
+					$('.loader').hide();
+					//$('#contentdiv').html(result);
+					location.reload();
+				},
+				error: function (result) {
+					debugger;
+					alert("Failed");
+				}
+			});
+			return false;
+		});
+	});
+</script>

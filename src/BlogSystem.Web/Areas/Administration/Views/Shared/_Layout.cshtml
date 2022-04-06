@@ -1,0 +1,34 @@
+﻿<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+        <title>@ViewBag.Title - @ViewData["Blog_Title"]</title>
+
+        @Styles.Render("~/Content/tether")
+        @Styles.Render("~/Content/bootstrap")
+        @Styles.Render("~/Content/fonts")
+        @Styles.Render("~/Content/administration")
+    </head>
+    <body>
+        @Html.Partial("_Header")
+        
+        <div class="container-fluid">
+            <div class="row">
+                @{ Html.RenderAction("AdminMenu", "Home"); }
+
+                <main class="col-sm-9 offset-sm-3 col-md-10 offset-md-2 pt-3">
+                    @RenderBody()
+                </main>
+            </div>
+        </div>
+
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/tether")
+        @Scripts.Render("~/bundles/bootstrap")
+
+        @RenderSection("scripts", false)
+    </body>
+</html>

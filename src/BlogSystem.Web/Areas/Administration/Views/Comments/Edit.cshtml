@@ -1,0 +1,34 @@
+﻿@model BlogSystem.Web.Areas.Administration.ViewModels.Comments.CommentViewModel
+
+@{
+    ViewBag.Title = "Edit Comment";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm("Edit", "Comments", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(m => m.Id)
+    @Html.HiddenFor(m => m.PostId)
+    @Html.HiddenFor(m => m.AuthorId)
+    @Html.HiddenFor(m => m.CreatedOn)
+
+    @Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
+
+    <div class="form-group">
+        @Html.EditorFor(model => model.Content)
+        @Html.ValidationMessageFor(model => model.Content, string.Empty, new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-success">Save</button>
+
+        @Html.ActionLink("Cancel", "Index", "Comments", new { area = "Administration" }, new { @class = "btn btn-danger" })
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
